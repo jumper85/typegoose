@@ -6,6 +6,7 @@
   "scripts": {
     "start": "npm run build && node ./lib/typegoose.js",
     "build": "rimraf lib && tsc",
+	"prepare": "npm run build"
     "lint": "tslint --project tsconfig.json",
     "test": "npm run lint && npm run cover",
     "mocha": "npm run build && mocha ./lib --recursive --exit",
