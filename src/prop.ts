@@ -96,7 +96,7 @@ const baseProp = (rawOptions, Type, target, key, isArray = false) => {
     schema[name][key] = {
       ...schema[name][key],
       type: mongoose.Schema.Types.ObjectId,
-      ref: ref.name,
+      ref: ref.modelName ? ref.modelName : ref.name,
     };
     return;
   }
@@ -106,7 +106,7 @@ const baseProp = (rawOptions, Type, target, key, isArray = false) => {
     schema[name][key][0] = {
       ...schema[name][key][0],
       type: mongoose.Schema.Types.ObjectId,
-      ref: itemsRef.name,
+      ref: itemsRef.modelName ? itemsRef.modelName : itemsRef.name,
     };
     return;
   }
