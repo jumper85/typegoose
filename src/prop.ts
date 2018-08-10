@@ -97,6 +97,7 @@ const baseProp = (rawOptions, Type, target, key, isArray = false) => {
       ...schema[name][key],
       type: mongoose.Schema.Types.ObjectId,
       ref: ref.modelName ? ref.modelName : ref.name,
+      required: rawOptions.required ? true : false,
     };
     return;
   }
@@ -107,6 +108,7 @@ const baseProp = (rawOptions, Type, target, key, isArray = false) => {
       ...schema[name][key][0],
       type: mongoose.Schema.Types.ObjectId,
       ref: itemsRef.modelName ? itemsRef.modelName : itemsRef.name,
+      required: rawOptions.required ? true : false,
     };
     return;
   }
