@@ -12,8 +12,8 @@ export type RequiredType = boolean | [boolean, string] | string | Func | [Func, 
 
 export type ValidatorFunction = (value: any) => boolean | Promise<boolean>;
 export type Validator = ValidatorFunction | RegExp | {
-    validator: ValidatorFunction,
-    message?: string,
+  validator: ValidatorFunction,
+  message?: string,
 };
 
 export interface BasePropOptions {
@@ -116,7 +116,11 @@ const baseProp = (rawOptions, Type, target, key, isArray = false) => {
   const enumOption = rawOptions.enum;
   if (enumOption) {
     if (!Array.isArray(enumOption)) {
-      rawOptions.enum = Object.keys(enumOption).map((propKey) => enumOption[propKey]);
+      rawOptions.enum = Object.keys(enumOption).map((propKey) => {
+        if (isNaN(Number(propKey))) {
+          return enumOption[propKey];
+        }
+      }).filter((x) => !!x);
     }
   }
 
@@ -130,7 +134,13 @@ const baseProp = (rawOptions, Type, target, key, isArray = false) => {
   }
 
   const instance = new Type();
-  const subSchema = schema[instance.constructor.name];
+  let schemaName = instance.constructor.name;
+
+  if (instance.constructor.name === "model" && Type.modelName) {
+    schemaName = Type.modelName;
+  }
+
+  const subSchema = schema[schemaName];
   if (!subSchema && !isPrimitive(Type) && !isObject(Type)) {
     throw new InvalidPropError(Type.name, key);
   }
